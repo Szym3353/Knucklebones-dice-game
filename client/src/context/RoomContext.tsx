@@ -84,17 +84,10 @@ export function RoomProvider({ children }: props) {
   const navigate = useNavigate();
   const [roomData, setRoomData] = useState<room>(defaultRoom);
   const [errors, setErrors] = useState<errorType[] | []>([]);
-  //let [errIndexes, setErrIndexes] = useState<number[]>([])
 
   useEffect(() => {
-    //let errorIndex = errors.length - 1
-    //setErrIndexes((prev:number[]) => ([...prev, errors.length - 1]))
-    //setTimeout(function() {setErrors((prev:errorType[] | []) => )})
-    console.log("error check", roomData);
     if (errors.length > 0) {
-      console.log("check1", errors.length);
       if (errors[errors.length - 1].action === "changePath") {
-        console.log("check2", errors[errors.length - 1].action);
         navigate("/");
       }
     }
@@ -138,9 +131,9 @@ export function RoomProvider({ children }: props) {
 
   function startGame() {
     if (roomData?.players?.every((el: player) => el.ready === true)) {
-      socket.emit("start-game", roomData._id, (err: string) => {
+      socket.emit("start-game", roomData._id, (err: errorType) => {
         if (err) {
-          return console.log(err);
+          if (err) return setErrors((prev: errorType[]) => [...prev, err]);
         }
         setRoomData((prev: room) => ({ ...prev, gameStarted: true }));
       });

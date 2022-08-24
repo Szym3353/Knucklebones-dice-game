@@ -1,5 +1,5 @@
 import { Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../socketio";
 
@@ -11,30 +11,16 @@ import { player, room } from "../context/RoomContext";
 
 const Room = () => {
   let { id } = useParams();
-
-  /* const [roomData, setRoomData] = useState<room>({
-    code: 12345,
-    gameStarted: false,
-    turn: 0,
-    currentDice: 0,
-    players: [
-      { ready: false, board: [0], id: "a", username: "a", selecting: false },
-    ],
-  }); */
-
   const { roomData, setRoomData, setErrors } = useRoom();
 
   useEffect(() => {
     socket.emit("get-room", { id }, (err: errorType, res: room) => {
       if (err) setErrors((prev: errorType[]) => [...prev, err]);
-
       if (res) {
-        console.log("GET ROOM", res);
         setRoomData(res);
       }
     });
     socket.on("startGame", () => {
-      console.log("start game?");
       setRoomData((prev: room) => ({ ...prev, gameStarted: true }));
     });
     socket.on("change-users", (data: [player]) => {

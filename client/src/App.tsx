@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { theme } from "./themes/mainTheme";
 
 //Socket
 import { socket } from "./socketio";
@@ -37,24 +36,22 @@ function App() {
 
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <RoomProvider>
-          {isConnected ? (
-            <Container
-              disableGutters
-              maxWidth={false}
-              sx={{ height: "100vh", bgcolor: "#242424" }}
-            >
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/room/:id" element={<Room />} />
-              </Routes>
-            </Container>
-          ) : (
-            <CircularProgress />
-          )}
-        </RoomProvider>
-      </ThemeProvider>
+      <RoomProvider>
+        {isConnected ? (
+          <Container
+            disableGutters
+            maxWidth={false}
+            sx={{ height: "100vh", bgcolor: "#242424" }}
+          >
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/room/:id" element={<Room />} />
+            </Routes>
+          </Container>
+        ) : (
+          <CircularProgress />
+        )}
+      </RoomProvider>
     </div>
   );
 }
